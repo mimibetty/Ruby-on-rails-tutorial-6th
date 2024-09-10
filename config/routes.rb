@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :microposts
   # normal route for user format RESTFUL
   resources :users
 
