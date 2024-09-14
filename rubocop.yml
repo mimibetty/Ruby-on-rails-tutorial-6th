@@ -1,0 +1,25 @@
+inherit_from: .rubocop_todo.yml
+
+require:
+  - rubocop-capybara
+  - rubocop-minitest
+  - rubocop-packaging
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-md
+
+AllCops:
+  # RuboCop has a bunch of cops enabled by default. This setting tells RuboCop
+  # to ignore them, so only the ones explicitly set in this file are enabled.
+  DisabledByDefault: true
+  NewCops: enable
+  Exclude:
+    - 'vendor/**/*'
+    - 'test/fixtures/**/*'
+    - 'db/**/*'
+    - 'bin/**/*'
+    - 'log/**/*'
+    - 'tmp/**/*'
+    - 'app/views/**/*'
+    - 'config/environments/*'
+    - 'node_modules/**/*'
