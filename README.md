@@ -23,10 +23,10 @@ $ gem install bundler -v 2.2.17
 $ bundle _2.2.17_ config set --local without 'production'
 $ bundle _2.2.17_ install
 
-$ bundle install
-$ rails db:migrate
-$ rails webpacker:install
-$ bundle exec rubocop -A
+ bundle install
+ rails db:migrate
+ rails webpacker:install
+ bundle exec rubocop -A
 
 ```
 
@@ -51,7 +51,7 @@ If the test suite passes, you'll be ready to run the app in a local server:
 $ rails server
 ```
 
-
+yarn add jquery@3.4.1 bootstrap@3.4.1
 
 
 
@@ -78,3 +78,8 @@ When you create a pull request, make sure this is GREEN in Github Action before 
 
 For more information, see the
 [*Ruby on Rails Tutorial* book](https://www.railstutorial.org/book).
+
+
+user = User.new(name: "thanhminh2", email: "thanhminh2@gmail.com", password: "123456", password_confirmation: "123456")
+user.save
+user.errors.full_messages
