@@ -35,12 +35,37 @@ Finally, run the test suite to verify that everything is working correctly:
 ```
 $ rails test
 ```
+test a specific file....
+$ rails test test/controllers/static_pages_controller_test.rb
+```
 
 If the test suite passes, you'll be ready to run the app in a local server:
 
 ```
 $ rails server
 ```
+
+
+
+
+
+
+After cloning a repo:
+
+    Run bundle install to install Ruby gems
+    Run yarn install to install JavaScript packages
+    Run rails webpacker:install to set up Webpacker
+    Run rails webpacker:compile to compile your assets
+
+
+
+Run below command to inspect your coding style:
+
+```bash
+bundle exec rubocop .
+```
+
+When you create a pull request, make sure this is GREEN in Github Action before request a review
 
 For more information, see the
 [*Ruby on Rails Tutorial* book](https://www.railstutorial.org/book).
