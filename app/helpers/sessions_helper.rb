@@ -42,6 +42,11 @@ module SessionsHelper
   #   end
   # end
 
+  # Returns true if the given user is the current user.
+  def current_user?(user)
+    user && user == current_user
+  end
+
   # Returns the user corresponding to the remember token cookie.
   def current_user
     @current_user ||= find_user_by_session || find_user_by_cookie
