@@ -78,8 +78,17 @@ When you create a pull request, make sure this is GREEN in Github Action before 
 
 For more information, see the
 [*Ruby on Rails Tutorial* book](https://www.railstutorial.org/book).
-
-
+user = User.new(name: "thanhminh", email: "thanhminh@gmail.com", password: "123456", password_confirmation: "123456")
+user.save
+user = User.new(name: "thanhminh1", email: "thanhminh1@gmail.com", password: "123456", password_confirmation: "123456")
+user.save
 user = User.new(name: "thanhminh2", email: "thanhminh2@gmail.com", password: "123456", password_confirmation: "123456")
 user.save
+
 user.errors.full_messages
+
+
+// fix webpacker
+yarn add webpack@4
+yarn add webpack-cli@3.3.0
+yarn add @rails/webpacker
