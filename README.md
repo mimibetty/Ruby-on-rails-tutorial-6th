@@ -95,3 +95,4 @@ user.save
 user.errors.full_messages
 
 
+rails db:migrate:reset
