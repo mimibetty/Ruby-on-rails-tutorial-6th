@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:edit, :update]
+  before_action :admin_user, only: :destroy
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user,  only: [:edit, :update]
 
   before_action :set_user, only: %i[show edit update destroy]
-  
+
   # GET /users or /users.json
   def index
-    @users = User.all
+    # @users = User.all
+    @users = User.paginate(page: params[:page], per_page: 30)
   end
 
   # GET /users/1 or /users/1.json
@@ -62,8 +64,8 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-    # Handle a successful update.
-      flash[:success] = "Profile updated"
+      # Handle a successful update.
+      flash[:success] = 'Profile updated'
       redirect_to @user
     else
       render 'edit'
@@ -72,12 +74,14 @@ class UsersController < ApplicationController
 
   # DELETE /users/1 or /users/1.json
   def destroy
-    @user.destroy
-
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    User.find(params[:id]).destroy
+    flash[:success] = 'User deleted'
+    redirect_to users_url
+    # @user.destroy
+    # respond_to do |format|
+    #   format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+    #   format.json { head :no_content }
+    # end
   end
 
   private
@@ -96,7 +100,7 @@ class UsersController < ApplicationController
   def logged_in_user
     unless logged_in?
       store_location
-      flash[:danger] = "Please log in."
+      flash[:danger] = 'Please log in.'
       redirect_to login_url
     end
   end
@@ -105,5 +109,9 @@ class UsersController < ApplicationController
   def correct_user
     @user = User.find(params[:id])
     redirect_to(root_url) unless current_user?(@user)
+  end
+
+  def admin_user
+    redirect_to(root_url) unless current_user.admin?
   end
 end
