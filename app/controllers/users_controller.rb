@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   # GET /users or /users.json
   def index
     # @users = User.all
+    # @users = User.where(activated: true).paginate(page: params[:page])
     @users = User.paginate(page: params[:page], per_page: 30)
   end
 
@@ -33,20 +34,19 @@ class UsersController < ApplicationController
   # POST /users or /users.json
   def create
     @user = User.new(user_params)
-
-    # respond_to do |format|
     if @user.save
-      log_in @user
-      flash[:success] = 'Welcome to the Sample App!'
-      redirect_to @user
-      # format.html { redirect_to user_url(@user), notice: 'User was successfully created.' }
-      # format.json { render :show, status: :created, location: @user }
+      @user.send_activation_email
+      flash[:info] = 'Please check your email to activate your account.'
+      redirect_to root_url
+
+      # log_in @user
+      # flash[:success] = 'Welcome to the Sample App!'
+      # redirect_to @user
     else
       render 'new'
       # format.html { render :new, status: :unprocessable_entity }
       # format.json { render json: @user.errors, status: :unprocessable_entity }
     end
-    # end
   end
 
   # PATCH/PUT /users/1 or /users/1.json

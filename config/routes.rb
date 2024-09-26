@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
 
-  # normal route for user format RESTFUL
+  resources :account_activations, only: [:edit]
   resources :microposts
   resources :users
   # resources :users, except: [:edit] do
