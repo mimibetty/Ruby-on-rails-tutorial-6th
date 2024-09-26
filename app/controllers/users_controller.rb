@@ -9,7 +9,6 @@ class UsersController < ApplicationController
 
   # GET /users or /users.json
   def index
-    # @users = User.all
     # @users = User.where(activated: true).paginate(page: params[:page])
     @users = User.paginate(page: params[:page], per_page: 30)
   end
@@ -23,7 +22,6 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
-    # debugger
   end
 
   # GET /users/1/edit
@@ -38,29 +36,12 @@ class UsersController < ApplicationController
       @user.send_activation_email
       flash[:info] = 'Please check your email to activate your account.'
       redirect_to root_url
-
-      # log_in @user
-      # flash[:success] = 'Welcome to the Sample App!'
-      # redirect_to @user
     else
       render 'new'
-      # format.html { render :new, status: :unprocessable_entity }
-      # format.json { render json: @user.errors, status: :unprocessable_entity }
     end
   end
 
   # PATCH/PUT /users/1 or /users/1.json
-  # def update
-  #   respond_to do |format|
-  #     if @user.update(user_params)
-  #       format.html { redirect_to user_url(@user), notice: 'User was successfully updated.' }
-  #       format.json { render :show, status: :ok, location: @user }
-  #     else
-  #       format.html { render :edit, status: :unprocessable_entity }
-  #       format.json { render json: @user.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
@@ -77,11 +58,6 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash[:success] = 'User deleted'
     redirect_to users_url
-    # @user.destroy
-    # respond_to do |format|
-    #   format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-    #   format.json { head :no_content }
-    # end
   end
 
   def following

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  get 'password_resets/new'
-  get 'password_resets/edit'
   root 'static_pages#home'
   get '/home', to: 'static_pages#home', as: 'home'
   get '/about', to: 'static_pages#about'
@@ -12,6 +10,8 @@ Rails.application.routes.draw do
   get  '/login', to: 'sessions#new'
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
+
+  resources :relationships, only: [:create, :destroy]
   resources :password_resets, only: [:new, :create, :edit, :update]
   resources :account_activations, only: [:edit]
   resources :microposts,  only: [:create, :destroy]
@@ -21,13 +21,6 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :relationships, only: [:create, :destroy]
-  # resources :users, except: [:edit] do
-  #   member do
-  #     get 'updatefunc', action: :edit
-  #   end
-  # end
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
-  # root 'users#index'
   get '/goodbye', to: 'convert_application#goodbye'
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

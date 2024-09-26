@@ -2,10 +2,9 @@ class MicropostsController < ApplicationController
   before_action :logged_in_user, only: [:create, :destroy]
   before_action :correct_user, only: :destroy
 
-
   def create
     @micropost = current_user.microposts.build(micropost_params)
-    @micropost.image.attach(params[:micropost][:image])
+    @micropost.image.attach(micropost_params[:image]) #maybe not necessary because rails do it when include image in strong param
     if @micropost.save
       flash[:success] = 'Micropost created!'
       redirect_to root_url
