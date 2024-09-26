@@ -27,10 +27,11 @@ $ bundle _2.2.17_ install
  rails db:migrate
  rails db:seed
 
-// fix webpacker
 yarn add webpack@4
 yarn add webpack-cli@3.3.0
 yarn add @rails/webpacker
+// fix webpacker
+
 
  rails webpacker:install
  bundle exec rubocop -A
