@@ -12,7 +12,7 @@ class UsersController < ApplicationController
 
   def show
     @microposts = @user.microposts.includes(:user, image_attachment: :blob)
-                       .paginate(page: params[:page], per_page: 30) #use includes to avoid N+1 query  
+                       .paginate(page: params[:page], per_page: 30) # use includes to avoid N+1 query
   end
 
   def new

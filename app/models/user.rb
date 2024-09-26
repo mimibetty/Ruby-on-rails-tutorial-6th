@@ -35,12 +35,7 @@ class User < ApplicationRecord
     following.include?(other_user)
   end
 
-  def feed
-    following_ids = "SELECT followed_id FROM relationships
-                      WHERE follower_id = :user_id"
-    Micropost.where("user_id IN (#{following_ids})
-                    OR user_id = :user_id", user_id: id)
-  end
+
 
   # Returns the hash digest of the given string.
   def User.digest(string)
@@ -66,6 +61,13 @@ class User < ApplicationRecord
     BCrypt::Password.new(digest).is_password?(token)
   end
 
+  # old version
+  # def feed
+  #   following_ids = "SELECT followed_id FROM relationships
+  #                     WHERE follower_id = :user_id"
+  #   Micropost.where("user_id IN (#{following_ids})
+  #                   OR user_id = :user_id", user_id: id)
+  # end
   # Forgets a user.
   def feed
     Micropost.can_view(id)
@@ -96,7 +98,7 @@ class User < ApplicationRecord
     self.reset_token = User.new_token
     update(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)
   end
-  
+
   # Sends password reset email.
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
