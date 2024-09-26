@@ -6,19 +6,36 @@ class User < ApplicationRecord
   before_create :create_activation_digest
 
   has_many :microposts, dependent: :destroy
-  validates :name, presence: true, length: {maximum: 50}
+  has_many :active_relationships, class_name: 'Relationship',
+            foreign_key: 'follower_id', dependent: :destroy
+  has_many :passive_relationships, class_name: 'Relationship',
+            foreign_key: 'followed_id', dependent: :destroy
+  has_many :following, through: :active_relationships, source: :followed
+  has_many :followers, through: :passive_relationships, source: :follower
 
+  validates :name, presence: true, length: {maximum: 50}
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   validates :email, presence: true, length: {maximum: 255},
-  format: {with: VALID_EMAIL_REGEX},
-  uniqueness: true
-
+  format: {with: VALID_EMAIL_REGEX}, uniqueness: true
   has_secure_password
   validates :password, presence: true, length: {minimum: 6}, allow_nil: true
 
-  def feed
-    Micropost.where('user_id = ?', id)
+  # Follows a user.
+  def follow(other_user)
+    following << other_user
   end
+
+  # Unfollows a user.
+  def unfollow(other_user)
+    following.delete(other_user)
+  end
+
+  # Returns true if the current user is following the other user.
+  def following?(other_user)
+    following.include?(other_user)
+  end
+
+
 
   # Returns the hash digest of the given string.
   def User.digest(string)
@@ -32,7 +49,6 @@ class User < ApplicationRecord
     SecureRandom.urlsafe_base64
   end
 
-
   def remember
     self.remember_token = User.new_token
     update_attribute(:remember_digest, User.digest(remember_token))
@@ -45,9 +61,16 @@ class User < ApplicationRecord
     BCrypt::Password.new(digest).is_password?(token)
   end
 
+  # old version
+  # def feed
+  #   following_ids = "SELECT followed_id FROM relationships
+  #                     WHERE follower_id = :user_id"
+  #   Micropost.where("user_id IN (#{following_ids})
+  #                   OR user_id = :user_id", user_id: id)
+  # end
   # Forgets a user.
-  def forget
-    update_attribute(:remember_digest, nil)
+  def feed
+    Micropost.can_view(id)
   end
 
   def downcase_email
@@ -62,8 +85,7 @@ class User < ApplicationRecord
 
   # Activates an account.
   def activate
-    update_attribute(:activated,   true)
-    update_attribute(:activated_at, Time.zone.now)
+    update(activated: true, activated_at: Time.zone.now)
   end
 
   # Sends activation email.
@@ -74,8 +96,7 @@ class User < ApplicationRecord
   # Sets the password reset attributes.
   def create_reset_digest
     self.reset_token = User.new_token
-    update_attribute(:reset_digest, User.digest(reset_token))
-    update_attribute(:reset_sent_at, Time.zone.now)
+    update(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)
   end
 
   # Sends password reset email.
