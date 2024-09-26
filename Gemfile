@@ -10,8 +10,6 @@ gem 'bootstrap-will_paginate',    '1.0.0'
 gem 'active_storage_validations', '0.8.2'
 gem 'image_processing', '~> 1.9'
 gem 'mini_magick', '~> 4.11'
-
-
 gem 'bcrypt', '3.1.13'
 gem 'bootstrap-sass', '3.4.1'
 gem 'rails', '~> 6.1.7', '>= 6.1.7.8'
